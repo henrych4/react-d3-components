@@ -156,9 +156,9 @@ const AreaChart = createReactClass({
 
         const start = {x: 0, y: 0};
         const end = {x: 200, y: 200};
-        const stroke = 'black';
-        const strokeWidth = 2;
-        const strokeDasharray = '';
+        const lineStroke = 'black';
+        const lineStrokeWidth = 2;
+        const lineStrokeDasharray = '';
 
         return (
             <div>
@@ -177,9 +177,9 @@ const AreaChart = createReactClass({
                     <Line
                         start={start}
                         end={end}
-                        stroke={stroke}
-                        strokeWidth={strokeWidth}
-                        strokeDasharray={strokeDasharray}
+                        stroke={lineStroke}
+                        strokeWidth={lineStrokeWidth}
+                        strokeDasharray={lineStrokeDasharray}
                     />
                     <Axis
                         className="x axis"
