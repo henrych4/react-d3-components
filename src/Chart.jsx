@@ -23,11 +23,12 @@ const Chart = createReactClass({
             margin,
             viewBox,
             preserveAspectRatio,
-            children
+            children,
+            onMouseMove,
         } = this.props;
 
         return (
-            <svg ref="svg" width={width} height={height} viewBox={viewBox} preserveAspectRatio={preserveAspectRatio} >
+            <svg ref="svg" width={width} height={height} viewBox={viewBox} preserveAspectRatio={preserveAspectRatio} onMouseMove={onMouseMove}>
                 <g transform={`translate(${margin.left}, ${margin.top})`}>{children}</g>
             </svg>
         );

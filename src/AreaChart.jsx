@@ -36,7 +36,7 @@ const DataSet = createReactClass({
             values,
             label,
             onMouseEnter,
-            onMouseLeave
+            onMouseLeave,
         } = this.props;
 
         const areas = data.map((stack, index) => <Path
@@ -75,6 +75,18 @@ const AreaChart = createReactClass({
             interpolate: 'linear',
             stroke: d3.scale.category20()
         };
+    },
+
+    getInitialState() {
+        return {
+            clientx: 0,
+        };
+    },
+
+    _onMouseMove(e) {
+        this.setState({
+            clientx: e.clientX,
+        });
     },
 
     _tooltipHtml(d, position) {
@@ -134,8 +146,13 @@ const AreaChart = createReactClass({
             y0,
             xAxis,
             yAxis,
-            yOrientation
+            yOrientation,
+            lineIndicator=true,
         } = this.props;
+
+        const {
+            clientx,
+        } = this.state;
 
         const data = this._data;
         const innerWidth = this._innerWidth;
@@ -154,15 +171,20 @@ const AreaChart = createReactClass({
             .y1(e => yScale(y0(e) + y(e)))
             .interpolate(interpolate);
 
-        const start = {x: 0, y: 0};
-        const end = {x: 200, y: 200};
-        const lineStroke = 'black';
-        const lineStrokeWidth = 2;
-        const lineStrokeDasharray = '';
+        const lineStroke = this.props.lineStroke || 'black';
+        const lineStrokeWidth = this.props.lineStrokeWidth || 2;
+        const lineStrokeDasharray = this.props.lineStrokeDasharray || '5, 5';
+
+        const getX = (screenx, width, margin) => {
+            const currX = screenx - (window.innerWidth - width) / 2 - margin.left
+            const minX = 0;
+            const maxX = width - margin.left - margin.right;
+            return Math.max(0, Math.min(currX, maxX));
+        }
 
         return (
             <div>
-                <Chart height={height} width={width} margin={margin} viewBox={viewBox} preserveAspectRatio={preserveAspectRatio}>
+                <Chart height={height} width={width} margin={margin} viewBox={viewBox} preserveAspectRatio={preserveAspectRatio} onMouseMove={this._onMouseMove}>
                     <DataSet
                         data={data}
                         line={line}
@@ -174,13 +196,13 @@ const AreaChart = createReactClass({
                         onMouseEnter={this.onMouseEnter}
                         onMouseLeave={this.onMouseLeave}
                     />
-                    <Line
-                        start={start}
-                        end={end}
+                    {lineIndicator && <Line
+                        start={{x: getX(clientx, width, margin), y: 0}}
+                        end={{x: getX(clientx, width, margin), y: height - margin.top - margin.bottom}}
                         stroke={lineStroke}
                         strokeWidth={lineStrokeWidth}
                         strokeDasharray={lineStrokeDasharray}
-                    />
+                    />}
                     <Axis
                         className="x axis"
                         orientation="bottom"
