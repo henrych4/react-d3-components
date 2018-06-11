@@ -6,6 +6,7 @@ import d3 from 'd3';
 import Chart from './Chart';
 import Axis from './Axis';
 import Path from './Path';
+import Line from './Line';
 import Tooltip from './Tooltip';
 
 import DefaultPropsMixin from './DefaultPropsMixin';
@@ -153,6 +154,12 @@ const AreaChart = createReactClass({
             .y1(e => yScale(y0(e) + y(e)))
             .interpolate(interpolate);
 
+        const start = {x: 0, y: 0};
+        const end = {x: 200, y: 200};
+        const stroke = 'black';
+        const strokeWidth = 2;
+        const strokeDasharray = '';
+
         return (
             <div>
                 <Chart height={height} width={width} margin={margin} viewBox={viewBox} preserveAspectRatio={preserveAspectRatio}>
@@ -166,6 +173,13 @@ const AreaChart = createReactClass({
                         values={values}
                         onMouseEnter={this.onMouseEnter}
                         onMouseLeave={this.onMouseLeave}
+                    />
+                    <Line
+                        start={start}
+                        end={end}
+                        stroke={stroke}
+                        strokeWidth={strokeWidth}
+                        strokeDasharray={strokeDasharray}
                     />
                     <Axis
                         className="x axis"
